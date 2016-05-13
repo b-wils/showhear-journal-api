@@ -1,13 +1,27 @@
 var express = require('express');
 var app = express();
 
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
+
 app.set('port', (process.env.PORT || 5000));
 
-// app.use(express.static(__dirname + '/public'));
 
-// // views is directory for all template files
-// app.set('views', __dirname + '/views');
-// app.set('view engine', 'ejs');
+var url = process.env.MONGODB_URI;
+
+// mongo middleware
+app.use(function(req, resp, next){
+	MongoClient.connect(url, function (err, db) {
+	  if (err) {
+	    console.log('Unable to connect to the mongoDB server. Error:', err);
+	  } else {
+	    req.db = db;
+	  }
+	  next();
+	});
+});
+
+app/
 
 app.get('/', function(request, response) {
   response.json({
